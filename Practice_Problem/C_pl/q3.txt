@@ -1,0 +1,7 @@
+Knowledge Check: What's the largest number you could represent in base-10 with 6 digits? What about 15 digits?
+What's the largest number you could represent in binary with 12 bits? What about with 32 bits?
+
+(1) 999999
+(2) 999999999999999
+(3) 111111111111
+(4) 11111111111111111111111111111111
