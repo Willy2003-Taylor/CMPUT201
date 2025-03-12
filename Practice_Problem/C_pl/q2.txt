@@ -1,0 +1,7 @@
+Question: What does c >= 'a' && c <= 'z' check for us? What does c = c - 'a' + 'A' accomplish? What did we
+need to remember to write that?
+
+(1) c >= 'a' && c <= 'z' suggests that we may read a character which should be a lower letter.
+
+(2) c = c - 'a' + 'A' suggests to convert the character c (assume it is lower case) to the upper letter.
+    We just need to remember that the distance between 'a' and 'A'
