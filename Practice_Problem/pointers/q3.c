@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include<string.h>
 
 /* Write the function str replace as described
 below.
@@ -45,11 +46,24 @@ int main(){
 
     char input[size + 1];
 
-    if(fgets(input, sizeof(input), stdin) != NULL)
+    if(fgets(input, sizeof(input), stdin) != NULL){
         if(sscanf(input, " %c %c", &find, &repl) != 2){
             printf("Invalid Input!\n");
             return 1;
         }
+
+        char* extra_input = strchr(input + 1, ' ');
+
+        if(extra_input != NULL){
+            extra_input = strchr(extra_input + 1, ' ');
+
+            if(extra_input != NULL){
+                printf("Invalid Input! You have entered more than two characters.\n");
+                return 1;
+            }
+        }
+    }
+
 
     printf("The number of instances replaced is %d\n", str_replace(s, find, repl));
 
