@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include<string.h>
 
 /*Write a function replace which takes in an
 array and is parameterized by two integers tar and repl and
@@ -34,10 +35,21 @@ int main(){
     for(int i = 0; i < size; ++i)
         scanf("%d", &num[i]);
     
+    // Clear the input buffer
+    while (getchar() != '\n');
+
     printf("Input the target and the character you want to replace the target with: ");
 
-    if(scanf("%d%d", &tar, &repl) != 2){
-        printf("Invalid Input!\n");
+    char input[size];
+    if (fgets(input, sizeof(input), stdin) != NULL){
+        // Try to parse two integers from the input
+        if (sscanf(input, "%d%d", &tar, &repl) != 2) {
+            printf("Invalid Input! Please enter exactly two integers.\n");
+            return 1;
+        }
+    
+    else {
+        printf("Error reading input.\n");
         return 1;
     }
 
