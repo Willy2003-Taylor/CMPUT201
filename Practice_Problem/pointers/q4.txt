@@ -1,0 +1,11 @@
+Knowledge Check: What would happen if we hadn’t switched the break to continue? 
+What would happen if we just deleted break?
+
+It depends. The function of break is to directly step out of a loop, and function of continue is to skip the current
+loop and step in the next one.
+
+Therefore, if for a loop that is needed to be stepped out under certain condition but we make it proceed one more
+loop, which may cause unexpected error to the program.
+
+Similarly, if we deleted break in certain condition where the loop should end, which may contribute to additional
+loop, which may also cause unexpected error to the program.
