@@ -43,10 +43,23 @@ int main(){
     char input[size];
     if (fgets(input, sizeof(input), stdin) != NULL){
         // Try to parse two integers from the input
-        if (sscanf(input, "%d%d", &tar, &repl) != 2) {
+        int parse = sscanf(input, "%d%d", &tar, &repl);
+
+        if (parse != 2) {
             printf("Invalid Input! Please enter exactly two integers.\n");
             return 1;
         }
+
+        char* extra_input = strchr(input, ' ');
+        if(extra_input != NULL){
+            extra_input = strchr(extra_input + 1, ' ');
+
+            if(extra_input == NULL){
+                printf("Invalid Input! You have entered more than two numbers.\n");
+                return 1;
+            }
+        }
+    }
     
     else {
         printf("Error reading input.\n");
