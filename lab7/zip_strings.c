@@ -28,7 +28,6 @@ char *zipStrings(const char *s1, const char *s2) {
     return result;
 }
 
-
 int main() {
     char s1[256];
     char s2[256];
