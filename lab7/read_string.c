@@ -24,7 +24,6 @@ char *readString() {
     if(quote) ch = getchar();
 
     while(1){
-
         if(quote && ch == '\"') break;
 
         if(!quote && (ch == ' ' || ch == '\n' || ch == '\r')) break;
@@ -37,7 +36,8 @@ char *readString() {
                 return NULL;
             }
 
-            for(int i = 0; i < length; ++i) tmp[i] = str[i];
+            for(int i = 0; i < length; ++i) 
+                tmp[i] = str[i];
 
             free(str);
 
