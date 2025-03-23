@@ -19,7 +19,7 @@ void free_set(Set* set){
 }
 
 int binary_search(Set* set, int num){
-    int low = 0, high = set->size - 1;
+    int low = 0, high = (set->size) - 1;
 
     while (low <= high){
         int mid = low - (low - high) / 2;
@@ -51,7 +51,7 @@ void add_num(Set* set, int num){
 
     int i;
 
-    for(i = set -> size - 1; (i >= 0 && set -> element[i] > num); --i)
+    for(i = (set -> size) - 1; (i >= 0 && set -> element[i] > num); --i)
         set -> element[i + 1] = set -> element[i];
 
     set -> element[i + 1] = num;
@@ -63,7 +63,7 @@ void remove_num(Set* set, int num){
 
     if(index == -1) return;
 
-    for(int i = index; i <= set -> size - 1; ++i)
+    for(int i = index; i <= (set -> size) - 1; ++i)
         set -> element[i] = set -> element[i + 1];
 
     set -> size--;
@@ -76,7 +76,29 @@ void print_set(Set* set){
     printf("\n");
 }
 
+void union_sets(Set* set1, Set* set2, Set* result){
+    int i = 0, j = 0;
+    result -> size = 0;
 
+    while(i < set1 -> size && j < set2 -> size){
+        if(set1 -> element[i] < set2 -> element[j])
+            add_num(result, set1 -> element[i++]);
+
+        else if(set2 -> element[j] < set1 -> element[i])
+            add_num(result, set2 -> element[j++]);
+
+        else{
+            add_num(result, set1 -> element[i++]);
+            j++;
+        }
+    }
+
+    while(i < set1 -> size)
+        add_num(result, set1 -> element[i++]);
+
+    while(j < set2 -> size)
+        add_num(result, set2 -> element[j++]);
+}
 
 
 int main(){
