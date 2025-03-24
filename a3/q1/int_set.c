@@ -63,7 +63,7 @@ void remove_num(Set* set, int num){
 
     if(index == -1) return;
 
-    for(int i = index; i <= (set -> size) - 1; ++i)
+    for(int i = index; i <= (set -> size) - 2; ++i)
         set -> element[i] = set -> element[i + 1];
 
     set -> size--;
@@ -73,7 +73,7 @@ void print_set(Set* set){
     for(int i = 0; i < set -> size; ++i)
         printf("%d ", set -> element[i]);
 
-    printf("\n");
+    if(set -> size != 0) printf("\n");
 }
 
 void union_sets(Set* set1, Set* set2, Set* result){
