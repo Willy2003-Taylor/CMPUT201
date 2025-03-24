@@ -1,12 +1,39 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<assert.h>
 
 typedef struct{
     int* element;
     int size;
     int capacity;
 } Set;
+
+char* read_input(){
+    size_t capacity = 1;
+    char* input = malloc(capacity);
+    size_t length = 0;
+    int ch;
+
+    while((ch = getchar()) != '\n' && c != EOF){
+        if(length == capacity){
+            capacity *= 2;
+            input = realloc(input, capacity);
+            assert(input != NULL);
+        }
+
+        input[length++] = ch;
+    }
+
+    if(c == EOF && length == 0){
+        free(input);
+        return NULL;
+    }
+
+    input[length] = '\0';
+
+    return input;
+}
 
 void Set_init(Set* set, int init_capacity){
     set->element = (int*)malloc(init_capacity * sizeof(int));
@@ -123,53 +150,13 @@ int main(){
     Set_init(&set_y, 1);
     Set_init(&result, 1);
 
-    char op[1], targ[1];
-    int num;
-
     while(1){
-        scanf("%s", op);
 
-        if(strcmp(op, "q") == 0) break;
+        char* input = read_input();
+        if (input == NULL) break;
 
-        else if(strcmp(op, "a") == 0){
-            scanf("%s %d", targ, &num);
-
-            if(strcmp(targ, "x") == 0)
-                add_num(&set_x, num);
-
-            else if(strcmp(targ, "y") == 0)
-                add_num(&set_y, num);
-        }
-
-        else if(strcmp(op, "r") == 0){
-            scanf("%s %d", targ, &num);
-
-            if(strcmp(targ, "x") == 0)
-                remove_num(&set_x, num);
-
-            else if(strcmp(targ, "y") == 0)
-                remove_num(&set_y, num);
-        }
-
-        else if(strcmp(op, "p") == 0){
-            scanf("%s", targ);
-
-            if(strcmp(targ, "x") == 0)
-                print_set(&set_x);
-
-            else if(strcmp(targ, "y") == 0)
-                print_set(&set_y);
-        }
-
-        else if(strcmp(op, "u") == 0){
-            union_sets(&set_x, &set_y, &result);
-            print_set(&result);
-        }
-
-        else if(strcmp(op, "i") == 0){
-            intersection_sets(&set_x, &set_y, &result);
-            print_set(&result);
-        }
+        process_command(input, &x, &y, &result);
+        free(input);
     }
 
     free_set(&set_x);
