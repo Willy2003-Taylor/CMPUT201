@@ -19,14 +19,14 @@ void free_set(Set* set){
 }
 
 int binary_search(Set* set, int num){
-    int low = 0, high = (set->size) - 1;
+    int left = 0, right = (set->size) - 1;
 
-    while (low <= high){
-        int mid = low - (low - high) / 2;
+    while (left <= right){
+        int mid = left - (left - right) / 2;
 
         if(set -> element[mid] == num) return mid;
 
-        else if(set -> element[mid] < num) low = mid + 1;
+        else if(set -> element[mid] < num) left = mid + 1;
 
         else right = mid - 1;
     }
@@ -100,6 +100,21 @@ void union_sets(Set* set1, Set* set2, Set* result){
         add_num(result, set2 -> element[j++]);
 }
 
+void intersection_sets(Set* set1, Set* set2, Set* result){
+    int i = 0, j = 0;
+    result -> size = 0;
+
+    while(i < set1 -> size && j < set2 -> size){
+        if(set1 -> element[i] < set2 -> element[j]) i++;
+
+        else if(set2 -> element[j] < set1 -> element[i]) j++;
+
+        else{
+            add_num(result, set1 -> element[i++]);
+            j++;
+        }
+    }
+}
 
 int main(){
     Set set_x, set_y, result;
@@ -137,7 +152,7 @@ int main(){
         }
 
         else if(strcmp(op, "p") == 0){
-            scanf("%s %d", targ, &num);
+            scanf("%s", targ);
 
             if(strcmp(targ, "x") == 0)
                 print_set(&set_x);
