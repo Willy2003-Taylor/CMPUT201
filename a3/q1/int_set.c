@@ -3,6 +3,8 @@
 #include<string.h>
 #include<assert.h>
 
+int input_len;
+
 typedef struct{
     int* element;
     int size;
@@ -25,6 +27,8 @@ char* read_input(){
         input[length++] = ch;
     }
 
+    input_len = length;
+
     if(c == EOF && length == 0){
         free(input);
         return NULL;
@@ -33,6 +37,31 @@ char* read_input(){
     input[length] = '\0';
 
     return input;
+}
+
+int valid_command(char ch){
+    return ch == 'a' || ch == 'r' || ch == 'p' || ch == 'u' || ch == 'i' || ch == 'q';
+}
+
+
+
+void process_command(char* input, Set* x, Set* y, Set* result){
+    char command[input_len], targ[input_len];
+    int num;
+    int match = sscanf(input, "%s %s %d", command, targ, &num);
+
+    if(!valid_command(command[0]) && strlen(command) != 1){
+        printf("Invalid command: received %c\n", command[0]);
+        printf("Your test case is likely invalid input\n");
+
+        return;
+    }
+
+    if(command[0] == 'q'){
+        free(input);
+        return;
+    }
+
 }
 
 void Set_init(Set* set, int init_capacity){
