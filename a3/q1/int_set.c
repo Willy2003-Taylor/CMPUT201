@@ -1,68 +1,12 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include<assert.h>
-
-int input_len;
 
 typedef struct{
     int* element;
     int size;
     int capacity;
 } Set;
-
-char* read_input(){
-    size_t capacity = 1;
-    char* input = malloc(capacity);
-    size_t length = 0;
-    int ch;
-
-    while((ch = getchar()) != '\n' && c != EOF){
-        if(length == capacity){
-            capacity *= 2;
-            input = realloc(input, capacity);
-            assert(input != NULL);
-        }
-
-        input[length++] = ch;
-    }
-
-    input_len = length;
-
-    if(c == EOF && length == 0){
-        free(input);
-        return NULL;
-    }
-
-    input[length] = '\0';
-
-    return input;
-}
-
-int valid_command(char ch){
-    return ch == 'a' || ch == 'r' || ch == 'p' || ch == 'u' || ch == 'i' || ch == 'q';
-}
-
-
-
-void process_command(char* input, Set* x, Set* y, Set* result){
-    char command[input_len], targ[input_len];
-    int num;
-    int match = sscanf(input, "%s %s %d", command, targ, &num);
-
-    if(!valid_command(command[0]) && strlen(command) != 1){
-        printf("Invalid command: received %c\n", command[0]);
-        printf("Your test case is likely invalid input\n");
-
-        return;
-    }
-
-    if(command[0] == 'q'){
-        free(input);
-        return;
-    }
-
-}
 
 void Set_init(Set* set, int init_capacity){
     set->element = (int*)malloc(init_capacity * sizeof(int));
@@ -119,7 +63,7 @@ void remove_num(Set* set, int num){
 
     if(index == -1) return;
 
-    for(int i = index; i <= (set -> size) - 2; ++i)
+    for(int i = index; i <= (set -> size) - 1; ++i)
         set -> element[i] = set -> element[i + 1];
 
     set -> size--;
@@ -129,7 +73,7 @@ void print_set(Set* set){
     for(int i = 0; i < set -> size; ++i)
         printf("%d ", set -> element[i]);
 
-    if(set -> size != 0) printf("\n");
+    printf("\n");
 }
 
 void union_sets(Set* set1, Set* set2, Set* result){
@@ -179,13 +123,53 @@ int main(){
     Set_init(&set_y, 1);
     Set_init(&result, 1);
 
+    char op[1], targ[1];
+    int num;
+
     while(1){
+        scanf("%s", op);
 
-        char* input = read_input();
-        if (input == NULL) break;
+        if(strcmp(op, "q") == 0) break;
 
-        process_command(input, &x, &y, &result);
-        free(input);
+        else if(strcmp(op, "a") == 0){
+            scanf("%s %d", targ, &num);
+
+            if(strcmp(targ, "x") == 0)
+                add_num(&set_x, num);
+
+            else if(strcmp(targ, "y") == 0)
+                add_num(&set_y, num);
+        }
+
+        else if(strcmp(op, "r") == 0){
+            scanf("%s %d", targ, &num);
+
+            if(strcmp(targ, "x") == 0)
+                remove_num(&set_x, num);
+
+            else if(strcmp(targ, "y") == 0)
+                remove_num(&set_y, num);
+        }
+
+        else if(strcmp(op, "p") == 0){
+            scanf("%s", targ);
+
+            if(strcmp(targ, "x") == 0)
+                print_set(&set_x);
+
+            else if(strcmp(targ, "y") == 0)
+                print_set(&set_y);
+        }
+
+        else if(strcmp(op, "u") == 0){
+            union_sets(&set_x, &set_y, &result);
+            print_set(&result);
+        }
+
+        else if(strcmp(op, "i") == 0){
+            intersection_sets(&set_x, &set_y, &result);
+            print_set(&result);
+        }
     }
 
     free_set(&set_x);
