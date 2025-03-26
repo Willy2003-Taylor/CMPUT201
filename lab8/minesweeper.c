@@ -2,16 +2,16 @@
 #include<stdlib.h>
 
 char** map_input(int width, int height){
-    char** map = malloc(width* sizeof(char*));
+    char** map = malloc(height* sizeof(char*));
     if(!map) return NULL;
 
-    for(size_t i = 0; i < width; ++i){
-        map[i] = malloc(height* sizeof(char));
-        if(!map) return NULL;
+    for(size_t i = 0; i < height; ++i){
+        map[i] = malloc(width* sizeof(char));
+        if(!map[i]) return NULL;
     }
 
-    for(size_t i = 0; i < width; ++i)
-        for(size_t j = 0; j < height; ++i)
+    for(size_t i = 0; i < height; ++i)
+        for(size_t j = 0; j < width; ++j)
             scanf(" %c", &map[i][j]);
 
     return map;
@@ -35,35 +35,46 @@ int bomb_count(int x, int y, char** map, int width, int height){
     return result;
 }
 
-void map_print(){
-    char** map = map_input(width, height);
-
-    for(size_t i = 0; i < height; ++i)
+void map_print(char** map, int width, int height){
+    for(size_t i = 0; i < height; ++i){
         for(size_t j = 0; j < width; ++j)
-            printf("%c ", map[i][j]);
+            printf("%c", map[i][j]);
 
         printf("\n");
+    }
+}
+
+void free_map(char** map, int height){
+    for(int i = 0; i < height; ++i)
+        free(map[i]);
+
+    free(map);
 }
 
 int main(){
     int width, height, x, y;
 
-
-
     scanf("%d %d", &width, &height);
 
     char** map = map_input(width, height);
 
-    while(scanf("%d %d", &x, &y) == 2){
-        if(map[x][y] == 'X'){
-            
-            continue;
-        }
+    if(!map){
+        fprintf(stderr, "Memory Allocation Failed\n");
+        return 1;
+    }
 
-        else if(map[x][y] == 'O'){
-            printf();
+    map_print(map, width, height);
+
+    while(scanf("%d %d", &y, &x) == 2){
+        if(map[x][y] == 'X') printf("BOMB!\n");
+
+        else{
+            int count = bomb_count(x, y, map, width, height);
+
+            printf("%d bombs\n", count);
         }
     }
 
+    free_map(map, height);
     return 0;
 }
