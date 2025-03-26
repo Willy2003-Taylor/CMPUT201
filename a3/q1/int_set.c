@@ -9,7 +9,7 @@ typedef struct{
 } Set;
 
 void Set_init(Set* set, int init_capacity){
-    set->element = (int*)malloc(init_capacity * sizeof(int));
+    set->element = malloc(init_capacity * sizeof(int));
     set->size = 0;
     set->capacity = init_capacity;
 }
