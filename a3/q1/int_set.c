@@ -36,7 +36,7 @@ int binary_search(Set* set, int num){
 
 void resize_set(Set* set){
     set -> capacity *= 2;
-    set -> element = (int*)realloc(set -> element, (set -> capacity) * sizeof(int)); 
+    set -> element = realloc(set -> element, (set -> capacity) * sizeof(int)); 
 }
 
 
@@ -70,8 +70,13 @@ void remove_num(Set* set, int num){
 }
 
 void print_set(Set* set){
-    for(int i = 0; i < set -> size; ++i)
+    
+    if(set -> size == 0) return;
+
+    for(int i = 0; i < set -> size - 1; ++i)
         printf("%d ", set -> element[i]);
+
+    printf("%d", set -> element[set -> size - 1]);
 
     printf("\n");
 }
@@ -119,9 +124,9 @@ void intersection_sets(Set* set1, Set* set2, Set* result){
 int main(){
     Set set_x, set_y, result;
 
-    Set_init(&set_x, 1);
-    Set_init(&set_y, 1);
-    Set_init(&result, 1);
+    Set_init(&set_x, 4);
+    Set_init(&set_y, 4);
+    Set_init(&result, 4);
 
     char op[1], targ[1];
     int num;
