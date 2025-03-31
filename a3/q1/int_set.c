@@ -63,7 +63,7 @@ void remove_num(Set* set, int num){
 
     if(index == -1) return;
 
-    for(int i = index; i <= (set -> size) - 1; ++i)
+    for(int i = index; i <= (set -> size) - 2; ++i)
         set -> element[i] = set -> element[i + 1];
 
     set -> size--;
