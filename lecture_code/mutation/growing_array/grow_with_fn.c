@@ -13,6 +13,12 @@ void push(int **arr, int *len, int *cap, int elem) {
   (*arr)[(*len)++] = elem;
 }
 
+int pop(int **arr, int *len, int *cap) {
+  // Removes the item from the back of our growing
+  // array and returns that integer
+  return (*arr)[--*len];
+}
+
 int main() {
   int len = 0;
   int cap = 4;
