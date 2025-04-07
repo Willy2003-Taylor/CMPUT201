@@ -39,13 +39,27 @@ int count_tile(struct Maze* maze, char tile){
     return result;
 }
 
+struct Pos find_teleporter(struct Maze* m, int y, int x){
+    char known_teleporter = m->grid[y][x];
+
+    for(int i = 0; i < m->rows; ++i)
+        for(int j = 0; j < m->cols; ++j)
+            if(m->grid[i][j] == known_teleporter && (i != y || j != x)){
+                struct Pos pos = {j, i};
+                return pos;
+            }
+
+    struct Pos pos = {y, x};
+    return pos;
+}
+
 struct Maze *readMaze(){
     int capacity = 4;
     char* input = malloc(capacity * sizeof(char));
     int rows = 0;
     int cols = 0;
     char** lines = NULL;
-
+    
     if(!input){
         printf("Initialization Error\n");
         return NULL;
@@ -166,7 +180,11 @@ struct Maze *readMaze(){
         So we need to set walls from the border of the tile to
         the border of the maze*/
 
-        for(size_t j = strlen(lines[i]); j < cols; ++j)
+        int row_length = strlen(lines[i]);
+
+        if(row_length < cols) 
+
+        for(size_t j = row_length; j < cols; ++j)
             maze->grid[i][j] = 'X';
 
         maze->grid[i][cols] = '\0';
@@ -191,6 +209,92 @@ struct Maze *readMaze(){
     
 }
 
+struct Pos makeMove(struct Maze *m, char dir){
+    struct Pos current_pos = m->current;
+
+    int dx = 0, dy = 0;
+    
+    switch(dir){
+        case 'n': dy = -1; break;
+        case 's': dy = 1; break;
+        case 'e': dx = 1; break;
+        case 'w': dx = -1; break;
+
+        default: return current_pos;
+    }
+
+    current_pos.x += dx;
+    current_pos.y += dy;
+
+    //Check bounds (Starting tile is always in the first quadrant)
+
+    if(current_pos.x < 0 || current_pos.y < 0 || current_pos.x >= m->cols || current_pos.y >= m->rows)
+        return m->current;
+
+    //Check walls
+
+    if(m->grid[current_pos.y][current_pos.x] == 'X')
+        return m->current;
+
+    //Check Teleporter
+
+    if(m->grid[current_pos.y][current_pos.x] >= '0' && m->grid[current_pos.y][current_pos.x] <= '9'){
+        //Check if we can find the paired teleporter in the grid
+
+        struct Pos paired_teleporter = find_teleporter(m, current_pos.y, current_pos.x);
+
+        current_pos = paired_teleporter;
+    }
+
+    while(m->grid[current_pos.y][current_pos.x] == 'I'){
+        current_pos.x += dx;
+        current_pos.y += dy;
+
+        if (current_pos.x < 0 || current_pos.x >= m->cols || current_pos.y < 0 || current_pos.y >= m->rows){
+            current_pos.x -= dx;
+            current_pos.y -= dy;
+            break;
+        }
+
+        if(m->grid[current_pos.y][current_pos.x] == 'X'){
+            current_pos.x -= dx;
+            current_pos.y -= dy;
+            break;
+        }
+
+        if(m->grid[current_pos.y][current_pos.x] >= '0' && m->grid[current_pos.y][current_pos.x] <= '9'){
+            //Check if we can find the paired teleporter in the grid
+    
+            struct Pos paired_teleporter = find_teleporter(m, current_pos.y, current_pos.x);
+    
+            current_pos = paired_teleporter;
+            break;
+        }
+    }
+
+    //Check if reaching the exit
+
+    if(m ->grid[current_pos.y][current_pos.x] == 'G'){
+        m->current = current_pos;
+
+        struct Pos exit = {-1, -1};
+
+        return exit;
+    }
+
+    //Update the current position
+
+    if(m ->grid[current_pos.y][current_pos.x] == 'O' || 
+    m->grid[current_pos.y][current_pos.x] == 'S' || m ->grid[current_pos.y][current_pos.x] == 'I' || (m->grid[current_pos.y][current_pos.x] >= '0' && m->grid[current_pos.y][current_pos.x] <= '9'))
+        m->current = current_pos;
+
+    return current_pos;
+}
+
+void reset(struct Maze *m){
+    m->current = m->start;
+}
+
 void printMaze(struct Maze *m){
     //Top border
     for(int i = 0; i < m->cols + 2; ++i)
@@ -203,7 +307,11 @@ void printMaze(struct Maze *m){
     for(int i = 0; i < m->rows; ++i){
         printf("|");
 
-        for(int j = 0; j < m->cols; ++j){
+        size_t row_length = strlen(m->grid[i]);
+
+        int cols_to_print = row_length < m->cols ? row_length : m->cols;
+        
+        for(int j = 0; j < cols_to_print; ++j){
             if(i == m->current.y && j == m->current.x)
                 printf("P");
 
