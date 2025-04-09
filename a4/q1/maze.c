@@ -6,6 +6,7 @@
 
 struct Maze{
     char** grid;
+    int* tile_num;
     int rows;
     int cols;
     struct Pos current;
@@ -166,8 +167,14 @@ struct Maze *readMaze(){
     maze->rows = rows;
     maze->cols = cols;
     maze->grid = malloc(rows * sizeof(char*));
+    maze->tile_num = malloc(rows * sizeof(int));
+
+    //tile_num[i] is used to record the number of tiles in each row (excluding the invisible walls)
+
+    //Record the length before setting the invisible wall can resolve 'invisible wall' problem
 
     for(int i = 0; i < rows; ++i){
+        maze->tile_num[i] = strlen(lines[i]);
         maze->grid[i] = malloc((cols + 1) * sizeof(char));
         strcpy(maze->grid[i], lines[i]);
 
@@ -181,8 +188,6 @@ struct Maze *readMaze(){
         the border of the maze*/
 
         int row_length = strlen(lines[i]);
-
-        if(row_length < cols) 
 
         for(size_t j = row_length; j < cols; ++j)
             maze->grid[i][j] = 'X';
@@ -307,11 +312,7 @@ void printMaze(struct Maze *m){
     for(int i = 0; i < m->rows; ++i){
         printf("|");
 
-        size_t row_length = strlen(m->grid[i]);
-
-        int cols_to_print = row_length < m->cols ? row_length : m->cols;
-        
-        for(int j = 0; j < cols_to_print; ++j){
+        for(int j = 0; j < m->tile_num[i]; ++j){
             if(i == m->current.y && j == m->current.x)
                 printf("P");
 
@@ -337,6 +338,8 @@ struct Maze *destroyMaze(struct Maze *m){
             free(m->grid[i]);
 
         free(m->grid);
+
+    if(m->tile_num != NULL) free(m->tile_num);
 
     free(m);
     return NULL;
