@@ -332,11 +332,12 @@ void printMaze(struct Maze *m){
 struct Maze *destroyMaze(struct Maze *m){
     if(m == NULL) return NULL;
 
-    if(m->grid != NULL)
+    if(m->grid != NULL){
         for(int i = 0; i < m->rows; ++i)
             free(m->grid[i]);
 
         free(m->grid);
+    }
 
     if(m->tile_num != NULL) free(m->tile_num);
 
