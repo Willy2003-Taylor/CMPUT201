@@ -1,9 +1,11 @@
-Knowledge Check: How does strlen work without being given a size parameter?
+Knowledge Check: What would happen if we hadn’t switched the break to continue? 
+What would happen if we just deleted break?
 
-We know that the parameter provided to strlen function is the string without size as extra parameter.
+It depends. The function of break is to directly step out of a loop, and function of continue is to skip the current
+loop and step in the next one.
 
-So strlen only counts the length of the string (without the null terminator '\0').
+Therefore, if for a loop that is needed to be stepped out under certain condition but we make it proceed one more
+loop, which may cause unexpected error to the program.
 
-Starts at the beginning of the string (at str[0]).
-Counts each character one by one until it encounters the null terminator ('\0').
-The function then returns the number of characters before the null terminator.
+Similarly, if we deleted break in certain condition where the loop should end, which may contribute to additional
+loop, which may also cause unexpected error to the program.

@@ -1,21 +1,25 @@
 #include<stdio.h>
-#include<string.h>
 
-/*Write a function replace which takes in an
-array and is parameterized by two integers tar and repl and
-replaces every instance of tar in the given array with repl */
+/*Write a function argmax that returns the index
+of the maximal item in an array of integers. What parameters does
+your function need to have? 
 
-/*Assume the array size is not larger than 100*/
+Assume the array size n cannot be larger than 100*/
 
-void replace(int* num, int n, int tar, int repl){
+/*Parameters you need for the function are the array num and its size n*/
+
+int argmax(int* num, int n){
+    if(n <= 0) return -1;
+
+    int max_num = num[0];
+    int max_arg = -1;
     for(int i = 0; i < n; ++i)
-        if(num[i] == tar)
-            num[i] = repl;
+        if(max_num < num[i]){
+            max_num = num[i];
+            max_arg = i;
+        }
 
-    for(int i = 0; i < n; ++i)
-        printf("%d ", num[i]);
-    
-    printf("\n");
+    return max_arg;
 }
 
 int main(){
@@ -28,47 +32,14 @@ int main(){
         return 1;
     }
 
-    int num[size], tar, repl;
+    int num[size];
 
     printf("Input the values for the array: ");
 
     for(int i = 0; i < size; ++i)
         scanf("%d", &num[i]);
-    
-    // Clear the input buffer
-    while (getchar() != '\n');
 
-    printf("Input the target and the character you want to replace the target with: ");
+    printf("The index of the maximum value in the array is: %d\n",argmax(num, size));
 
-    char input[size];
-    if (fgets(input, sizeof(input), stdin) != NULL){
-        // Try to parse two integers from the input
-        int parse = sscanf(input, "%d%d", &tar, &repl);
-
-        if (parse != 2) {
-            printf("Invalid Input! Please enter exactly two integers.\n");
-            return 1;
-        }
-
-        char* extra_input = strchr(input, ' ');
-        if(extra_input != NULL){
-            extra_input = strchr(extra_input + 1, ' ');
-
-            if(extra_input == NULL){
-                printf("Invalid Input! You have entered more than two numbers.\n");
-                return 1;
-            }
-        }
-    }
-    
-    else {
-        printf("Error reading input.\n");
-        return 1;
-    }
-
-    printf("The array whose %d is replaced by %d is: ", tar, repl);
-
-    replace(num, size, tar, repl);
-    
     return 0;
 }

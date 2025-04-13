@@ -1,0 +1,9 @@
+Knowledge Check: How does strlen work without being given a size parameter?
+
+We know that the parameter provided to strlen function is the string without size as extra parameter.
+
+So strlen only counts the length of the string (without the null terminator '\0').
+
+Starts at the beginning of the string (at str[0]).
+Counts each character one by one until it encounters the null terminator ('\0').
+The function then returns the number of characters before the null terminator.

@@ -1,24 +1,21 @@
 #include<stdio.h>
 #include<string.h>
 
-/* Write the function str replace as described
-below.
-int str_replace(char *s, char find, char repl);
-str_replace replaces every instance of find in string s with the
-character repl and returns the number of instances replaced.*/
+/*Write a function replace which takes in an
+array and is parameterized by two integers tar and repl and
+replaces every instance of tar in the given array with repl */
 
 /*Assume the array size is not larger than 100*/
 
-int str_replace(char* s, char find, char repl){
-    int count = 0;
+void replace(int* num, int n, int tar, int repl){
+    for(int i = 0; i < n; ++i)
+        if(num[i] == tar)
+            num[i] = repl;
 
-    for(int i = 0; s[i] != '\0'; ++i)
-        if(s[i] == find){
-            s[i] = repl;
-            ++count;
-        }
+    for(int i = 0; i < n; ++i)
+        printf("%d ", num[i]);
     
-    return count;
+    printf("\n");
 }
 
 int main(){
@@ -31,47 +28,47 @@ int main(){
         return 1;
     }
 
-    char s[size + 1], find, repl;
+    int num[size], tar, repl;
 
     printf("Input the values for the array: ");
 
     for(int i = 0; i < size; ++i)
-        scanf(" %c", &s[i]);
+        scanf("%d", &num[i]);
     
-    s[size + 1] = '\0';
+    // Clear the input buffer
+    while (getchar() != '\n');
 
-    while(getchar() != '\n');
+    printf("Input the target and the character you want to replace the target with: ");
 
-    printf("Input the \"find\" and the character you want to replace the \"find\" with: ");
+    char input[size];
+    if (fgets(input, sizeof(input), stdin) != NULL){
+        // Try to parse two integers from the input
+        int parse = sscanf(input, "%d%d", &tar, &repl);
 
-    char input[size + 1];
-
-    if(fgets(input, sizeof(input), stdin) != NULL){
-        if(sscanf(input, " %c %c", &find, &repl) != 2){
-            printf("Invalid Input!\n");
+        if (parse != 2) {
+            printf("Invalid Input! Please enter exactly two integers.\n");
             return 1;
         }
 
-        char* extra_input = strchr(input + 1, ' ');
-
+        char* extra_input = strchr(input, ' ');
         if(extra_input != NULL){
             extra_input = strchr(extra_input + 1, ' ');
 
-            if(extra_input != NULL){
-                printf("Invalid Input! You have entered more than two characters.\n");
+            if(extra_input == NULL){
+                printf("Invalid Input! You have entered more than two numbers.\n");
                 return 1;
             }
         }
     }
-
-
-    printf("The number of instances replaced is %d\n", str_replace(s, find, repl));
-
-    printf("The replaced array is: ");
-
-    for(int i = 0; i < size; ++i)
-        printf("%c", s[i]);
     
-    printf("\n");
+    else {
+        printf("Error reading input.\n");
+        return 1;
+    }
+
+    printf("The array whose %d is replaced by %d is: ", tar, repl);
+
+    replace(num, size, tar, repl);
+    
     return 0;
 }
