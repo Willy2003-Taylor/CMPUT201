@@ -69,7 +69,7 @@ void print_image(Image* IMG){
         for(int j = 0; j < IMG -> width; j++){
             printf("%d %d %d", IMG -> pixel[i][j].r, IMG -> pixel[i][j].g, IMG -> pixel[i][j].b);
 
-            if(j < IMG -> width - 1) printf(" ");
+            if(j <= IMG -> width - 1) printf(" ");
         }
 
         printf("\n");
