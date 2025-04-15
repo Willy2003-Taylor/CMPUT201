@@ -1,0 +1,20 @@
+#!/bin/bash
+
+cmd="${1}"
+testSet="${2}"
+tempfile=$(mktemp)
+for stem in $(cat ${testSet}); do
+  ${cmd} $(cat ${stem}.args) < ${stem}.in > ${tempfile}
+  diff ${stem}.out ${tempfile} > /dev/null
+  if [ $? -ne 0 ]; then
+    echo ${stem} failed
+    echo "Expected output:"
+    cat ${stem}.out
+    echo "Real output:"
+    cat ${tempfile}
+  else
+    echo "${stem} passed"
+  fi
+done
+rm ${tempfile}
+

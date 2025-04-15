@@ -1,0 +1,8 @@
+Hello this is my file
+These are the contents
+Okay, great.
+This is a line appended
+This is a line appended
+This is a line appended
+This is a line appended
+Another line
