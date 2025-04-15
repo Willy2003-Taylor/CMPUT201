@@ -1,6 +1,4 @@
 #include<stdio.h>
-#include<string.h>
-#include<stdlib.h>
 
 /*Practice Problem: Implement your own strlen function called my strlen. You can not use character comparisons, but
 are allowed to use the following functions: strcmp, strcpy, strcat.
