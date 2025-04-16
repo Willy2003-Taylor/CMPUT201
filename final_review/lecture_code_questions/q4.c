@@ -10,6 +10,9 @@ void print_binary(unsigned int num){
     }
 
     printf("\n");
+
+    /*The issue existed in the function is the algorithm will
+    reversely print all the digits of the correct binary number*/
 }
 
 int main(){
